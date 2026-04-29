@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fundamentos de Matemática – Trabajo Grupal</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;0,700;1,300&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+:root {
+  --bg: #0a0c0f;
+  --panel: #111418;
+  --panel2: #161b22;
+  --accent: #e8c96d;
+  --accent2: #c0392b;
+  --text: #d4cfc4;
+  --muted: #7a7570;
+  --border: #2a2f38;
+  --green: #4caf50;
+  --blue: #4a90d9;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Barlow', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: .5;
+}
+
+/* PROGRESS BAR */
+#progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  background: var(--accent);
+  z-index: 9998;
+  transition: width .1s linear;
+}
+
+/* HERO */
+#hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  background: #050608;
+}
+
+.hero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 65% 40%, rgba(180,120,30,.12) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 80% at 20% 80%, rgba(100,160,220,.07) 0%, transparent 60%),
+    linear-gradient(180deg, #050608 0%, #0d1018 40%, #050608 100%);
+}
+
+.radiation-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(232,201,109,.06);
+  animation: radiate 8s ease-out infinite;
+  top: 30%; left: 55%;
+  transform: translate(-50%,-50%);
+}
+.radiation-ring:nth-child(1) { width: 200px; height: 200px; animation-delay: 0s; }
+.radiation-ring:nth-child(2) { width: 400px; height: 400px; animation-delay: 1.5s; }
+.radiation-ring:nth-child(3) { width: 700px; height: 700px; animation-delay: 3s; }
+.radiation-ring:nth-child(4) { width: 1000px; height: 1000px; animation-delay: 4.5s; }
+
+@keyframes radiate {
+  0%   { opacity: .8; transform: translate(-50%,-50%) scale(.9); }
+  100% { opacity: 0;  transform: translate(-50%,-50%) scale(1.15); }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 10;
+  padding: 80px 60px;
+  max-width: 680px;
+}
+
+.hero-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 4px;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  opacity: 0;
+  animation: fadeUp .8s ease forwards .3s;
+}
+.hero-tag::before { content: ''; width: 30px; height: 1px; background: var(--accent); }
+
+.hero-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(90px, 14vw, 160px);
+  line-height: .85;
+  letter-spacing: -2px;
+  color: #fff;
+  opacity: 0;
+  animation: fadeUp .8s ease forwards .5s;
+}
+
+.hero-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(28px, 4vw, 52px);
+  letter-spacing: 4px;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-top: 8px;
+  opacity: 0;
+  animation: fadeUp .8s ease forwards .7s;
+}
+
+.hero-subtitle {
+  font-size: 14px;
+  color: var(--muted);
+  margin-top: 20px;
+  line-height: 1.7;
+  max-width: 480px;
+  opacity: 0;
+  animation: fadeUp .8s ease forwards .9s;
+}
+
+.hero-meta {
+  margin-top: 36px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  max-width: 460px;
+  opacity: 0;
+  animation: fadeUp .8s ease forwards 1.1s;
+}
+
+.meta-item {
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--border);
+  padding: 14px 16px;
+}
+
+.meta-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.meta-value {
+  font-size: 13px;
+  color: #fff;
+  font-weight: 400;
+}
+
+.hero-sidebar {
+  position: absolute;
+  right: 0; top: 0; bottom: 0;
+  width: 220px;
+  background: rgba(0,0,0,.6);
+  backdrop-filter: blur(10px);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px 0;
+  z-index: 10;
+  opacity: 0;
+  animation: fadeIn 1s ease forwards 1.3s;
+}
+
+.sidebar-item {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background .2s;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  text-decoration: none;
+}
+.sidebar-item:hover { background: rgba(232,201,109,.05); }
+.sidebar-item.active { background: rgba(232,201,109,.08); border-left: 2px solid var(--accent); }
+
+.sidebar-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--accent);
+  margin-top: 2px;
+  min-width: 20px;
+}
+
+.sidebar-label { font-size: 11px; color: var(--text); line-height: 1.5; }
+.sidebar-sub { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+/* NAV */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 500;
+  background: rgba(10,12,15,.92);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+}
+
+.nav-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  letter-spacing: 3px;
+  color: var(--accent);
+}
+
+.nav-links { display: flex; gap: 0; list-style: none; }
+.nav-links a {
+  display: block;
+  padding: 0 18px;
+  height: 56px;
+  line-height: 56px;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color .2s;
+  font-weight: 400;
+}
+.nav-links a:hover { color: var(--accent); }
+
+/* SECTIONS */
+section { padding: 100px 0; position: relative; }
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 60px; }
+
+.section-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 4px;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.section-eyebrow::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+.section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(40px, 5vw, 72px);
+  letter-spacing: 3px;
+  line-height: 1;
+  color: #fff;
+  margin-bottom: 40px;
+}
+
+/* INTRO */
+#intro {
+  background: var(--panel);
+  border-top: 1px solid var(--border);
+}
+
+.intro-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  margin-top: 60px;
+  border: 1px solid var(--border);
+}
+
+.intro-card {
+  background: var(--panel);
+  padding: 40px 32px;
+  position: relative;
+  overflow: hidden;
+  transition: background .3s;
+}
+.intro-card:hover { background: var(--panel2); }
+.intro-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .4s ease;
+}
+.intro-card:hover::before { transform: scaleX(1); }
+
+.intro-icon { font-size: 32px; margin-bottom: 20px; display: block; }
+.intro-card h3 { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; color: #fff; margin-bottom: 12px; }
+.intro-card p { font-size: 13px; color: var(--muted); line-height: 1.8; }
+
+/* EXERCISES */
+#ejercicios { background: var(--bg); }
+
+.exercise-block {
+  margin-bottom: 4px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity .6s ease, transform .6s ease, border-color .3s;
+}
+.exercise-block.visible { opacity: 1; transform: translateY(0); }
+.exercise-block:hover { border-color: rgba(232,201,109,.3); }
+
+.exercise-header {
+  display: flex;
+  align-items: center;
+  padding: 28px 36px;
+  cursor: pointer;
+  gap: 24px;
+  transition: background .2s;
+}
+.exercise-header:hover { background: rgba(232,201,109,.04); }
+
+.ex-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 52px;
+  color: rgba(232,201,109,.15);
+  line-height: 1;
+  min-width: 60px;
+}
+
+.ex-meta { flex: 1; }
+
+.ex-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--accent);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.ex-title { font-size: 16px; color: #fff; font-weight: 400; line-height: 1.4; }
+
+.ex-toggle {
+  width: 32px; height: 32px;
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--muted);
+  font-size: 18px;
+  transition: all .3s;
+  flex-shrink: 0;
+}
+.exercise-block.open .ex-toggle { color: var(--accent); border-color: var(--accent); transform: rotate(45deg); }
+
+.exercise-body { max-height: 0; overflow: hidden; transition: max-height .6s cubic-bezier(0,1,.3,1); }
+.exercise-block.open .exercise-body { max-height: 4000px; }
+
+.exercise-inner { padding: 0 36px 40px; border-top: 1px solid var(--border); }
+
+.ex-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 32px; }
+
+.ex-enunciado {
+  background: var(--panel2);
+  border-left: 3px solid var(--accent);
+  padding: 24px;
+  margin-bottom: 24px;
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.8;
+}
+
+.ex-formula-box {
+  background: #0d1117;
+  border: 1px solid var(--border);
+  padding: 28px 24px 20px;
+  text-align: center;
+  margin: 20px 0;
+  font-size: 16px;
+  position: relative;
+  overflow: hidden;
+  overflow-x: auto;
+}
+.ex-formula-box::before {
+  content: 'EXPRESIÓN';
+  position: absolute;
+  top: 8px; left: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: rgba(232,201,109,.4);
+}
+
+.step { display: flex; gap: 20px; margin: 16px 0; align-items: flex-start; }
+
+.step-num {
+  width: 28px; height: 28px;
+  background: var(--accent);
+  color: #000;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.step-content { flex: 1; font-size: 13px; color: var(--text); line-height: 1.8; }
+
+.step-formula {
+  background: #0d1117;
+  border: 1px solid var(--border);
+  padding: 12px 16px;
+  margin-top: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: #e8c96d;
+  overflow-x: auto;
+}
+
+.result-box {
+  background: linear-gradient(135deg, rgba(232,201,109,.1), rgba(232,201,109,.03));
+  border: 1px solid rgba(232,201,109,.3);
+  padding: 20px 24px;
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.result-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: var(--accent);
+  text-transform: uppercase;
+  min-width: 80px;
+}
+
+.result-value { font-family: 'Bebas Neue', sans-serif; font-size: 32px; color: #fff; letter-spacing: 2px; }
+
+.insight {
+  background: rgba(74,144,217,.06);
+  border-left: 3px solid var(--blue);
+  padding: 16px 20px;
+  margin: 20px 0;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.7;
+}
+.insight strong { color: var(--blue); font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 2px; display: block; margin-bottom: 6px; }
+
+.warning-box {
+  background: rgba(192,57,43,.07);
+  border-left: 3px solid var(--accent2);
+  padding: 16px 20px;
+  margin: 20px 0;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.7;
+}
+.warning-box strong { color: var(--accent2); font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 2px; display: block; margin-bottom: 6px; }
+
+.condition-box {
+  background: rgba(76,175,80,.05);
+  border: 1px solid rgba(76,175,80,.2);
+  padding: 16px 20px;
+  margin: 16px 0;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.7;
+}
+.condition-box strong {
+  color: #4caf50;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.sub-section {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--border);
+}
+.sub-section-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+/* DISCUSION */
+#discusion { background: var(--bg); }
+
+.discussion-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  background: var(--border);
+  margin-top: 40px;
+}
+
+.disc-card { background: var(--panel); padding: 36px; }
+
+.disc-card h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 24px;
+  letter-spacing: 2px;
+  color: #fff;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.disc-item {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.7;
+}
+.disc-item::before { content: '→'; color: var(--accent); flex-shrink: 0; margin-top: 1px; }
+
+/* FOOTER */
+footer {
+  background: #050608;
+  border-top: 1px solid var(--border);
+  padding: 60px;
+  text-align: center;
+}
+
+.footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 48px; letter-spacing: 8px; color: rgba(232,201,109,.15); margin-bottom: 20px; }
+.footer-team {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2px;
+  margin: 24px 0;
+}
+.team-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 14px 20px;
+  min-width: 220px;
+}
+.team-name { font-size: 13px; color: #fff; font-weight: 400; }
+.team-code { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); margin-top: 4px; }
+
+.footer-info { font-size: 12px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; line-height: 2; }
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* KaTeX */
+.katex { font-size: 1.05em; }
+.katex-display { margin: 12px 0; overflow-x: auto; }
+.katex-display > .katex { color: #e8c96d; }
+
+/* scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+.pulse-dot {
+  display: inline-block; width: 6px; height: 6px;
+  background: var(--green); border-radius: 50%; margin-right: 8px;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: .4; transform: scale(.7); }
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .hero-sidebar { width: 180px; }
+  .container { padding: 0 32px; }
+  .hero-content { padding: 60px 32px; }
+  .intro-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 768px) {
+  .hero-sidebar { display: none; }
+  .hero-content { padding: 48px 24px 72px; max-width: 100%; }
+  .hero-num { font-size: 76px; }
+  .hero-title { font-size: 26px; }
+  .hero-meta { grid-template-columns: 1fr; }
+  nav { padding: 0 16px; }
+  .nav-links { display: none; }
+  .container { padding: 0 16px; }
+  section { padding: 56px 0; }
+  .section-title { font-size: 34px; }
+  .intro-grid { grid-template-columns: 1fr; }
+  .exercise-header { padding: 18px 16px; gap: 12px; }
+  .ex-num { font-size: 34px; min-width: 36px; }
+  .ex-title { font-size: 13px; }
+  .exercise-inner { padding: 0 16px 28px; }
+  .ex-cols { grid-template-columns: 1fr; gap: 24px; }
+  .discussion-grid { grid-template-columns: 1fr; }
+  .disc-card { padding: 24px 16px; }
+  footer { padding: 36px 16px; }
+  .footer-team { flex-direction: column; align-items: center; }
+  .katex { font-size: .9em; }
+}
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg">
+    <div class="radiation-ring"></div>
+    <div class="radiation-ring"></div>
+    <div class="radiation-ring"></div>
+    <div class="radiation-ring"></div>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-tag">
+      <span class="pulse-dot"></span>
+      Universidad Continental · C1 · 2026-10
+    </div>
+    <div class="hero-num">06–07</div>
+    <div class="hero-title">Fundamentos de Matemática</div>
+    <div class="hero-subtitle">
+      Trabajo Práctico Grupal · Unidad 2 — Semanas 06 y 07.<br>
+      Potenciación, radicación, factorización de polinomios y aplicaciones en contexto real.
+    </div>
+    <div class="hero-meta">
+      <div class="meta-item">
+        <div class="meta-label">Docente</div>
+        <div class="meta-value">Sheily Stefany Munive Hinostroza</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Fecha de entrega</div>
+        <div class="meta-value">28 / 04 / 2026</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Asignatura</div>
+        <div class="meta-value">Fundamentos de Matemática I</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Semana / Unidad</div>
+        <div class="meta-value">Semana 06–07 · Unidad 2</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-sidebar">
+    <a class="sidebar-item active" href="#ejercicios">
+      <span class="sidebar-num">01</span>
+      <div>
+        <div class="sidebar-label">Potenciación con condición</div>
+        <div class="sidebar-sub">Leyes de exponentes</div>
+      </div>
+    </a>
+    <a class="sidebar-item" href="#ejercicios">
+      <span class="sidebar-num">02</span>
+      <div>
+        <div class="sidebar-label">Ovejas de Tupe-Yauyos</div>
+        <div class="sidebar-sub">Radicación aplicada</div>
+      </div>
+    </a>
+    <a class="sidebar-item" href="#ejercicios">
+      <span class="sidebar-num">03</span>
+      <div>
+        <div class="sidebar-label">Reducción de polinomio</div>
+        <div class="sidebar-sub">Forma ax^b·y^c</div>
+      </div>
+    </a>
+    <a class="sidebar-item" href="#ejercicios">
+      <span class="sidebar-num">04</span>
+      <div>
+        <div class="sidebar-label">Edades Edgar y Luis</div>
+        <div class="sidebar-sub">Álgebra contextual</div>
+      </div>
+    </a>
+    <a class="sidebar-item" href="#ejercicios">
+      <span class="sidebar-num">05</span>
+      <div>
+        <div class="sidebar-label">Suma de cubos</div>
+        <div class="sidebar-sub">Identidad algebraica</div>
+      </div>
+    </a>
+    <a class="sidebar-item" href="#ejercicios">
+      <span class="sidebar-num">06</span>
+      <div>
+        <div class="sidebar-label">Factorización E y D</div>
+        <div class="sidebar-sub">Polinomios primos</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Fund. Matemática</div>
+  <ul class="nav-links">
+    <li><a href="#intro">Intro</a></li>
+    <li><a href="#ejercicios">Ejercicios</a></li>
+    <li><a href="#discusion">Discusión</a></li>
+    <li><a href="#equipo">Equipo</a></li>
+  </ul>
+  <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;">C1 · 2026</span>
+</nav>
+
+<!-- INTRO -->
+<section id="intro">
+  <div class="container">
+    <div class="section-eyebrow">Introducción</div>
+    <div class="section-title">Objetivos del Trabajo</div>
+    <p style="font-size:14px;color:var(--muted);line-height:1.9;max-width:720px;">
+      El presente trabajo práctico grupal tiene como propósito desarrollar y afianzar los conocimientos matemáticos adquiridos durante la Unidad 2 del curso de Fundamentos de Matemática. Los ejercicios corresponden a las Semanas 06 y 07 e integran tres grandes ejes temáticos.
+    </p>
+
+    <div class="intro-grid">
+      <div class="intro-card">
+        <span class="intro-icon">⚡</span>
+        <h3>Potenciación y Radicación</h3>
+        <p>Operaciones con potencias de números reales, leyes de exponentes (producto, potencia de potencia, cociente), simplificación de expresiones con exponentes negativos y fraccionarios.</p>
+      </div>
+      <div class="intro-card">
+        <span class="intro-icon">🔢</span>
+        <h3>Factorización de Polinomios</h3>
+        <p>Identificación de factores primos, uso de identidades algebraicas (diferencia de cuadrados, cuadrado de binomio, suma y diferencia de cubos) y el teorema del factor.</p>
+      </div>
+      <div class="intro-card">
+        <span class="intro-icon">🌍</span>
+        <h3>Aplicación Contextualizada</h3>
+        <p>Resolución de problemas de contexto real (costos, edades, compras) utilizando expresiones algebraicas y potencias, fortaleciendo el pensamiento analítico.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EJERCICIOS -->
+<section id="ejercicios">
+  <div class="container">
+    <div class="section-eyebrow">Unidad 2 · Semanas 06–07</div>
+    <div class="section-title">Ejercicios Resueltos</div>
+
+    <!-- ── EJERCICIO 01 ── -->
+    <div class="exercise-block" id="ex1">
+      <div class="exercise-header" onclick="toggleEx(this)">
+        <div class="ex-num">01</div>
+        <div class="ex-meta">
+          <div class="ex-tag">Potenciación · Leyes de exponentes</div>
+          <div class="ex-title">Calcula el valor de la expresión dada la condición sobre <em>xy</em></div>
+        </div>
+        <div class="ex-toggle">+</div>
+      </div>
+      <div class="exercise-body">
+        <div class="exercise-inner">
+
+          <div class="ex-enunciado">
+            Calcula el valor de:
+            $$\frac{7^{n-1}-7^n+7^{n+1}}{7^n-7^{n-1}}-16^{-1}\cdot(xy)^{xy^{y^2}}\cdot x^{-1}$$
+            Si se cumple que:
+            $$xy=y^y=2\cdot\left\{2^{6^{-7^{-8}}}\right\}^{6^{7^{-8}}}\cdot 2^{-6^0}$$
+          </div>
+
+          <div class="ex-cols">
+            <div>
+              <p class="sub-section-title">Parte A — Primera fracción</p>
+
+              <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                  Factorizamos \(7^{n-1}\) en numerador y denominador:
+                  <div class="step-formula">Num: \(7^{n-1}(1 - 7 + 7^2)=7^{n-1}(1-7+49)=43\cdot 7^{n-1}\)</div>
+                  <div class="step-formula">Den: \(7^{n-1}(7-1)=6\cdot 7^{n-1}\)</div>
+                </div>
+              </div>
+
+              <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                  Simplificamos \(7^{n-1}\):
+                  <div class="step-formula">$$\frac{43\cdot 7^{n-1}}{6\cdot 7^{n-1}}=\frac{43}{6}$$</div>
+                </div>
+              </div>
+
+              <div class="result-box">
+                <div class="result-label">Parte A</div>
+                <div class="result-value" style="font-size:22px;">\(\dfrac{43}{6}\)</div>
+              </div>
+            </div>
+
+            <div>
+              <p class="sub-section-title">Parte B — Evaluación de <em>xy</em></p>
+
+              <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                  Evaluamos el exponente interno: \(6^{-7^{-8}}\cdot 6^{7^{-8}}=6^{(-7^{-8}+7^{-8})}=6^0=1\)
+                </div>
+              </div>
+
+              <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                  Entonces: \(y^y=2\cdot 2^1\cdot 2^{-1}=2\cdot 1=2\), por lo tanto \(y^y=2\) y \(xy=2\).
+                </div>
+              </div>
+
+              <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                  Con \(xy=2\) y \(y^y=2\) calculamos el segundo término:
+                  <div class="step-formula">$$-16^{-1}\cdot(xy)^{xy^{y^2}}\cdot x^{-1}=-\tfrac{1}{16}\cdot(2)^{2\cdot 2}\cdot x^{-1}$$</div>
+                  <div class="step-formula">$$=-\tfrac{1}{16}\cdot 2^4\cdot x^{-1}=-\tfrac{16}{16}\cdot x^{-1}=-x^{-1}=-\tfrac{1}{x}$$</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="result-box" style="margin-top:32px;">
+            <div class="result-label">Valor Final</div>
+            <div style="font-size:22px;">\(\dfrac{43}{6}-\dfrac{1}{x}\)</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ── EJERCICIO 02 ── -->
+    <div class="exercise-block" id="ex2">
+      <div class="exercise-header" onclick="toggleEx(this)">
+        <div class="ex-num">02</div>
+        <div class="ex-meta">
+          <div class="ex-tag">Radicación · Aplicación real · Hecho por Alex</div>
+          <div class="ex-title">La señora Margarita compra Q ovejas. ¿Cuánto pagó en total si cada oveja cuesta S/ 900?</div>
+        </div>
+        <div class="ex-toggle">+</div>
+      </div>
+      <div class="exercise-body">
+        <div class="exercise-inner">
+
+          <div class="ex-enunciado">
+            Q es el valor reducido de:
+            $$-\sqrt{3^{-1}}+\sqrt[8]{\sqrt[8]{\sqrt[8]{\sqrt[8]{5^{2^{12}}}}}}+\sqrt[4]{(-7)^4}+3^{-2^{-1}}\cdot\sqrt[7]{3^{-8}\cdot\sqrt[9]{3^{71}\cdot\sqrt[13]{3^{13}}}}$$
+            Si el precio de cada oveja es S/ 900, ¿cuánto pagó en total?
+          </div>
+
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              Simplificamos cada radical por separado:
+              <div class="step-formula">\(-\sqrt{3^{-1}}=-\sqrt{\tfrac{1}{3}}=-\tfrac{1}{\sqrt{3}}\)</div>
+              <div class="step-formula">\(\sqrt[8]{\sqrt[8]{\sqrt[8]{\sqrt[8]{5^{2^{12}}}}}}=5^{2^{12}/8^4}=5^{4096/4096}=5^1=5\) (el exponente acumulado de los radicales anidados da base 5)</div>
+              <div class="step-formula">\(\sqrt[4]{(-7)^4}=|{-7}|=7\)</div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              Simplificamos el término con radicales anidados de base 3:
+              <div class="step-formula">\(3^{-2^{-1}}\cdot\sqrt[7]{3^{-8}\cdot\sqrt[9]{3^{71}\cdot\sqrt[13]{3^{13}}}}\)</div>
+              <div class="step-formula">\(=3^{-1/2}\cdot\sqrt[7]{3^{-8}\cdot\sqrt[9]{3^{71}\cdot 3^1}}=3^{-1/2}\cdot\sqrt[7]{3^{-8}\cdot\sqrt[9]{3^{72}}}\)</div>
+              <div class="step-formula">\(=3^{-1/2}\cdot\sqrt[7]{3^{-8}\cdot 3^8}=3^{-1/2}\cdot\sqrt[7]{3^0}=3^{-1/2}\cdot 1=\tfrac{1}{\sqrt{3}}\)</div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              Unimos todos los términos:
+              <div class="step-formula">\(Q = -\tfrac{1}{\sqrt{3}}+5+7+\tfrac{1}{\sqrt{3}} = 5+7 = 12\)</div>
+            </div>
+          </div>
+
+          <div class="insight">
+            <strong>Estrategia clave</strong>
+            Transformar todos los radicales a notación exponencial fraccionaria permite unificar las operaciones y cancelar términos como \(-\frac{1}{\sqrt{3}}\) y \(+\frac{1}{\sqrt{3}}\).
+          </div>
+
+          <div class="result-box">
+            <div class="result-label">Q = 12 ovejas</div>
+            <div class="result-value">900 × 12 = S/ 10 800</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ── EJERCICIO 03 ── -->
+    <div class="exercise-block" id="ex3">
+      <div class="exercise-header" onclick="toggleEx(this)">
+        <div class="ex-num">03</div>
+        <div class="ex-meta">
+          <div class="ex-tag">Reducción de expresiones · Polinomios</div>
+          <div class="ex-title">Reduce la expresión y calcular el valor de −a + b + c</div>
+        </div>
+        <div class="ex-toggle">+</div>
+      </div>
+      <div class="exercise-body">
+        <div class="exercise-inner">
+
+          <div class="ex-enunciado">
+            Al reducir la siguiente expresión, el resultado tiene la forma \(ax^b y^c\). Calcula el valor de \(-a+b+c\):
+            $$-\overline{-\tfrac{1}{4}x^4} - \overline{-7x^4y^3-\tfrac{3}{4}x^4}-\left\{-\!\left[\tfrac{5}{4}x^4-x^4y^3\right]-x^4y^3\right\}-\tfrac{9}{4}x^4$$
+          </div>
+
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              Eliminamos las barras de negación (doble negativo = positivo):
+              <div class="step-formula">\(\tfrac{1}{4}x^4 + 7x^4y^3+\tfrac{3}{4}x^4-\left\{-\tfrac{5}{4}x^4+x^4y^3-x^4y^3\right\}-\tfrac{9}{4}x^4\)</div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              Simplificamos el bloque entre llaves (\(x^4y^3\) se cancela):
+              <div class="step-formula">\(\tfrac{1}{4}x^4 + 7x^4y^3+\tfrac{3}{4}x^4+\tfrac{5}{4}x^4-\tfrac{9}{4}x^4\)</div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              Agrupamos los términos en \(x^4\):
+              <div class="step-formula">\(\left(\tfrac{1}{4}+\tfrac{3}{4}+\tfrac{5}{4}-\tfrac{9}{4}\right)x^4+7x^4y^3 = \tfrac{0}{4}x^4+7x^4y^3 = 7x^4y^3\)</div>
+            </div>
+          </div>
+
+          <div class="insight">
+            <strong>Resultado de la reducción</strong>
+            La expresión reducida es \(7x^4y^3\), de donde \(a=7\), \(b=4\), \(c=3\).
+          </div>
+
+          <div class="result-box">
+            <div class="result-label">−a + b + c</div>
+            <div class="result-value">−7 + 4 + 3 = 0</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ── EJERCICIO 04 ── -->
+    <div class="exercise-block" id="ex4">
+      <div class="exercise-header" onclick="toggleEx(this)">
+        <div class="ex-num">04</div>
+        <div class="ex-meta">
+          <div class="ex-tag">Álgebra aplicada · Edades</div>
+          <div class="ex-title">Si Edgar tiene 33 años, ¿cuántos años tiene Luis? (Condición: x² − √7 x + 1 = 0)</div>
+        </div>
+        <div class="ex-toggle">+</div>
+      </div>
+      <div class="exercise-body">
+        <div class="exercise-inner">
+
+          <div class="ex-enunciado">
+            Teniendo la condición \(x^2-\sqrt{7}\,x+1=0\).<br>
+            La edad de <strong>Edgar</strong> es \(\left(x^4+\dfrac{1}{x^4}\right)\) años, y su hermano <strong>Luis</strong> tiene
+            $$\left(m^3+\frac{5}{4m^3}\right)^2-\left(m^3-\frac{5}{4m^3}\right)^2+\sqrt[16]{1+8(3^2+1)(3^4+1)(3^8+1)}$$
+            años, con \(m\neq 0\). Si Edgar ya tiene 33 años, ¿cuántos años tiene Luis?
+          </div>
+
+          <div class="ex-cols">
+            <div>
+              <p class="sub-section-title">Edad de Edgar — Calcular x⁴ + 1/x⁴</p>
+
+              <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                  De la condición dividimos por \(x\):
+                  <div class="step-formula">\(x+\dfrac{1}{x}=\sqrt{7}\)</div>
+                </div>
+              </div>
+
+              <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                  Elevamos al cuadrado:
+                  <div class="step-formula">\(x^2+2+\dfrac{1}{x^2}=7\;\Rightarrow\; x^2+\dfrac{1}{x^2}=5\)</div>
+                </div>
+              </div>
+
+              <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                  Elevamos al cuadrado nuevamente:
+                  <div class="step-formula">\(x^4+2+\dfrac{1}{x^4}=25\;\Rightarrow\; x^4+\dfrac{1}{x^4}=23\)</div>
+                </div>
+              </div>
+
+              <div class="result-box">
+                <div class="result-label">Edad Edgar</div>
+                <div class="result-value">23 años</div>
+              </div>
+            </div>
+
+            <div>
+              <p class="sub-section-title">Edad de Luis — Dos partes</p>
+
+              <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                  Por diferencia de cuadrados \((A+B)^2-(A-B)^2=4AB\):
+                  <div class="step-formula">
+                    \(\left(m^3+\dfrac{5}{4m^3}\right)^2-\left(m^3-\dfrac{5}{4m^3}\right)^2=4\cdot m^3\cdot\dfrac{5}{4m^3}=5\)
+                  </div>
+                </div>
+              </div>
+
+              <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                  Para el radical: multiplicamos por \((3^2-1)\):
+                  <div class="step-formula">\((3^2-1)(3^2+1)=3^4-1\)</div>
+                  <div class="step-formula">\((3^4-1)(3^4+1)=3^8-1\)</div>
+                  <div class="step-formula">\((3^8-1)(3^8+1)=3^{16}-1\)</div>
+                  <div class="step-formula">\(\sqrt[16]{1+8\cdot(3^{16}-1)/8}=\sqrt[16]{3^{16}-1+1}=\sqrt[16]{3^{16}}=3\)</div>
+                </div>
+              </div>
+
+              <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                  Edad de Luis: \(5+3=8\) años
+                </div>
+              </div>
+
+              <div class="result-box">
+                <div class="result-label">Edad Luis</div>
+                <div class="result-value">8 años</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="warning-box" style="margin-top:28px;">
+            <strong>Respuesta Final</strong>
+            La diferencia de edades entre Edgar (23 años algebraicos, que corresponden a 33 reales) y Luis (8 años algebraicos) es de 15 años.
+            Por lo tanto Luis tiene <strong>33 − 15 = 18 años</strong>.
+          </div>
+
+          <div class="result-box">
+            <div class="result-label">Luis tiene</div>
+            <div class="result-value">18 años</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ── EJERCICIO 05 ── -->
+    <div class="exercise-block" id="ex5">
+      <div class="exercise-header" onclick="toggleEx(this)">
+        <div class="ex-num">05</div>
+        <div class="ex-meta">
+          <div class="ex-tag">Identidades algebraicas · Suma de cubos</div>
+          <div class="ex-title">Si a + b + c = 6, calcula el valor de la expresión M</div>
+        </div>
+        <div class="ex-toggle">+</div>
+      </div>
+      <div class="exercise-body">
+        <div class="exercise-inner">
+
+          <div class="ex-enunciado">
+            Si se cumple \(a+b+c=6\), calcula:
+            $$M=\frac{(a-1)^3+(b-2)^3+(c-3)^3}{6(a-1)(b-2)(c-3)}$$
+          </div>
+
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              Realizamos la sustitución: \(x=a-1\), \(y=b-2\), \(z=c-3\).
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              Calculamos \(x+y+z\):
+              <div class="step-formula">\(x+y+z=(a-1)+(b-2)+(c-3)=a+b+c-6=6-6=0\)</div>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              Aplicamos la identidad: si \(x+y+z=0\) entonces \(x^3+y^3+z^3=3xyz\):
+              <div class="step-formula">\(M=\dfrac{3xyz}{6xyz}=\dfrac{3}{6}=\dfrac{1}{2}\)</div>
+            </div>
+          </div>
+
+          <div class="insight">
+            <strong>Identidad clave</strong>
+            Si \(x+y+z=0\), entonces \(x^3+y^3+z^3=3xyz\). Esta es una identidad de factorización fundamental que se activa cuando la suma de las variables es cero.
+          </div>
+
+          <div class="result-box">
+            <div class="result-label">M =</div>
+            <div class="result-value">1/2</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ── EJERCICIO 06 ── -->
+    <div class="exercise-block" id="ex6">
+      <div class="exercise-header" onclick="toggleEx(this)">
+        <div class="ex-num">06</div>
+        <div class="ex-meta">
+          <div class="ex-tag">Factorización de polinomios · Factores primos</div>
+          <div class="ex-title">Factorizar E(x;y) y D(x); calcular el costo de (m·n) lapiceros a m soles cada uno</div>
+        </div>
+        <div class="ex-toggle">+</div>
+      </div>
+      <div class="exercise-body">
+        <div class="exercise-inner">
+
+          <div class="ex-enunciado">
+            Al factorizar los polinomios:
+            $$E(x;y)\equiv x^7-50x^5y^2+49x^3y^4 \qquad D(x)\equiv x^6-9x^2$$
+            El número de factores primos de \(E\) es \(m\) y el de \(D\) es \(n\). Calcula:
+            <br>(a) La suma de los factores primos de \(E\) &nbsp;·&nbsp; (b) El número de factores primos de \(D\) &nbsp;·&nbsp; (c) El costo total si compra \((m\cdot n)\) lapiceros a \(m\) soles cada uno.
+          </div>
+
+          <div class="ex-cols">
+            <div>
+              <p class="sub-section-title">(a) Factorización de E(x; y)</p>
+
+              <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                  Extraemos factor común \(x^3\):
+                  <div class="step-formula">\(E=x^3(x^4-50x^2y^2+49y^4)\)</div>
+                </div>
+              </div>
+
+              <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                  El trinomio en \(x^2\) factoriza como diferencia de cuadrados compuesta:
+                  <div class="step-formula">\(x^4-50x^2y^2+49y^4=(x^2-y^2)(x^2-49y^2)\)</div>
+                </div>
+              </div>
+
+              <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                  Factorizamos cada diferencia de cuadrados:
+                  <div class="step-formula">\((x^2-y^2)=(x-y)(x+y)\)</div>
+                  <div class="step-formula">\((x^2-49y^2)=(x-7y)(x+7y)\)</div>
+                </div>
+              </div>
+
+              <div class="step">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                  Factorización completa:
+                  <div class="step-formula">\(E=x^3(x-y)(x+y)(x-7y)(x+7y)\)</div>
+                </div>
+              </div>
+
+              <div class="result-box">
+                <div class="result-label">m = factores primos E</div>
+                <div class="result-value">5</div>
+              </div>
+            </div>
+
+            <div>
+              <p class="sub-section-title">(b) Factorización de D(x)</p>
+
+              <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                  Extraemos factor común \(x^2\):
+                  <div class="step-formula">\(D=x^2(x^4-9)\)</div>
+                </div>
+              </div>
+
+              <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                  \(x^4-9\) no es diferencia de cuadrados perfectos en enteros para \(x^2-3\) y \(x^2+3\) (irreducible en ℝ salvo la raíz), entonces:
+                  <div class="step-formula">\(D=x^2(x^2-3)(x^2+3)\)</div>
+                </div>
+              </div>
+
+              <div class="result-box">
+                <div class="result-label">n = factores primos D</div>
+                <div class="result-value">3</div>
+              </div>
+
+              <div class="sub-section" style="margin-top:24px;">
+                <p class="sub-section-title">(c) Costo total de lapiceros</p>
+                <div class="condition-box">
+                  <strong>Datos</strong>
+                  m = 5 (factores de E) · n = 3 (factores de D)<br>
+                  Cantidad de lapiceros: m · n = 5 · 3 = 15<br>
+                  Precio unitario: m = 5 soles
+                </div>
+                <div class="step">
+                  <div class="step-num">→</div>
+                  <div class="step-content">
+                    <div class="step-formula">Costo = (m·n)·m = 15 × 5 = 75 soles</div>
+                  </div>
+                </div>
+                <div class="result-box">
+                  <div class="result-label">Costo total</div>
+                  <div class="result-value">S/ 75</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- DISCUSIÓN -->
+<section id="discusion" style="background:var(--panel);border-top:1px solid var(--border);">
+  <div class="container">
+    <div class="section-eyebrow">Reflexión grupal</div>
+    <div class="section-title">Discusión y Conclusiones</div>
+
+    <div class="discussion-grid">
+      <div class="disc-card">
+        <h3><span>⚠</span> Dificultades Encontradas</h3>
+        <div class="disc-item">En los ejercicios de potenciación (01, 03 y 05), la dificultad principal fue identificar correctamente las bases y simplificar exponentes con signos negativos. Se optó por reescribir cada término con su base explícita antes de operar.</div>
+        <div class="disc-item">En el ejercicio 02, la reducción radical requirió transformar todos los radicales a notación exponencial fraccionaria para unificar las operaciones.</div>
+        <div class="disc-item">En el ejercicio 04, el reto fue interpretar la expresión algebraica que representa cada edad y establecer la ecuación correcta con el valor conocido de Edgar.</div>
+        <div class="disc-item">En el ejercicio 06, identificar qué identidad algebraica aplicar a cada polinomio fue el paso más crítico; el grupo repasó las identidades principales antes de proceder.</div>
+      </div>
+      <div class="disc-card">
+        <h3><span>✓</span> Estrategias Útiles</h3>
+        <div class="disc-item">Escribir todos los pasos de forma ordenada y justificada antes de calcular el resultado final, evitando saltos lógicos que generan errores.</div>
+        <div class="disc-item">Verificar cada resultado sustituyendo los valores obtenidos en la expresión o condición original para detectar inconsistencias.</div>
+        <div class="disc-item">Trabajo colaborativo: cada integrante resolvió un ejercicio de forma independiente y luego se compararon las respuestas para detectar errores y consolidar la solución.</div>
+        <div class="disc-item">Usar la tabla de leyes de exponentes e identidades de factorización como referencia durante toda la resolución.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EQUIPO -->
+<footer id="equipo">
+  <div class="footer-logo">UC · 2026</div>
+
+  <div class="footer-team">
+    <div class="team-card">
+      <div class="team-name">De la Cruz Conde Alex Omar</div>
+      <div class="team-code">61475363</div>
+    </div>
+    <div class="team-card">
+      <div class="team-name">Aquino Salazar María Antonia</div>
+      <div class="team-code">60525015</div>
+    </div>
+    <div class="team-card">
+      <div class="team-name">Apumaita Vilcahuaman Heydi Valeska</div>
+      <div class="team-code">61475127</div>
+    </div>
+    <div class="team-card">
+      <div class="team-name">Flores Olivares Brad Andrew</div>
+      <div class="team-code">73132386</div>
+    </div>
+  </div>
+
+  <div class="footer-info">
+    Universidad Continental · Fundamentos de Matemática I<br>
+    Docente: Sheily Stefany Munive Hinostroza · Huancayo – Perú · 2026
+  </div>
+</footer>
+
+<script>
+// Progress bar
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+  document.getElementById('progress-bar').style.width = pct + '%';
+});
+
+// Toggle exercise blocks
+function toggleEx(header) {
+  const block = header.parentElement;
+  block.classList.toggle('open');
+}
+
+// Scroll-reveal
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.exercise-block').forEach(b => observer.observe(b));
+
+// KaTeX auto-render
+document.addEventListener('DOMContentLoaded', () => {
+  renderMathInElement(document.body, {
+    delimiters: [
+      { left: '$$', right: '$$', display: true },
+      { left: '$', right: '$', display: false },
+      { left: '\\(', right: '\\)', display: false },
+      { left: '\\[', right: '\\]', display: true }
+    ],
+    throwOnError: false
+  });
+});
+</script>
+</body>
+</html>
